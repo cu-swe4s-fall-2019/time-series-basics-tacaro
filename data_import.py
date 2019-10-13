@@ -13,8 +13,20 @@ class ImportData:
         self._time = []
         self._value = []
         self._file = data_csv
+        self._duphandle = -1
+        # _duphandle indicates how duplicate values should be handled:
+        # 0 indicates that the values will be summed (activity, bolus, meal)
+        # 1 indicates that the values will be averaged (smbg, hr, cgm, basal)
         # open file, create a reader from csv.DictReader, read input times
         # and values
+        if 'activity' in data_csv or 'bolus' in data_csv or 'meal' in data_csv:
+            self._duphandle = 0
+        elif 'smbg' in data_csv or 'hr' in data_csv or 'cgm' in data_csv or \
+             'basal' in data_csv:
+            self._duphandle = 1
+        elif self._duphandle == -1:
+            print("Unsure how to average duplicate values!")
+            sys.exit(1)
 
         with open(data_csv) as csvfile:
             reader = csv.DictReader(csvfile)
@@ -51,13 +63,22 @@ class ImportData:
     def linear_search_value(self, key_time):
         # return list of value(s) associated with key_time
         # if none, return -1 and error message
+        output = []  # a list of datetime values
+        for i in range(len(self._time)):
+            if self._time[i] == key_time:
+                output.append(self._value[i])
+        if (len(output) == 0):
+            print("Key_time not found!")
+            return -1
 
-        pass
+        return output
+        # pass
 
     def binary_search_value(self, key_time):
         # optional extra credit
         # return list of value(s) associated with key_time
         # if none, return -1 and error message
+        # COME BACK TO THIS!
         pass
 
 
@@ -72,6 +93,7 @@ def roundTimeArray(obj, res):
     # return: iterable zip object of the two lists
     # note: you can create additional variables to help with this task
     # which are not returned
+
     pass
 
 
