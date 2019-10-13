@@ -4,32 +4,49 @@ from os import listdir
 from os.path import isfile, join
 import argparse
 import datetime
+import math
+import sys
 
 
 class ImportData:
     def __init__(self, data_csv):
         self._time = []
         self._value = []
-
-        # open file, create a reader from csv.DictReader, and read input times
+        self._file = data_csv
+        # open file, create a reader from csv.DictReader, read input times
         # and values
 
-        with open(data_csv, "r") as fhandle:
-            reader = csv.DictReader(fhandle)
+        with open(data_csv) as csvfile:
+            reader = csv.DictReader(csvfile)
             for row in reader:
-                try:
-                    self._time.append(dateutil.parser.parse(row['time']))
-                except ValueError:
-                    print("Can't parse this time properly!")
-                    print(row['time'])
+                if (row['time'] == ''):
+                    continue
+                time = (datetime.datetime.strptime(row['time'],
+                        '%m/%d/%y %H:%M'))
 
-            if row['value'] == 'low':
-                self.value.append(40)
-            elif row['value'] == 'high':
-                self.value.append(300)
-            else:
-                self._value.append(row['value'])
-            fhandle.close()
+                try:
+                    if (row['value'] == 'low'):
+                        print('converting low to 40')
+                        row['value'] = 40  # low to 40
+                    elif (row['value'] == 'high'):
+                        print('converting high to 300')
+                        row['value'] = 300  # high to 300
+
+                    val = float(row['value'])
+                    if (not math.isnan(val)):
+                        self._value.append(val)
+                        self._time.append(time)
+                except ValueError:
+                    print('Throwing out this value: ' + row['value'])
+
+            # Reverse the data if we find that the last time is less than the\
+            # first time!
+            if len(self._time) > 0:  # if time isn't empty
+                if (self._time[-1] < self._time[0]):
+                    self._time.reverse()
+                    self._value.reverse()
+
+            csvfile.close()
 
     def linear_search_value(self, key_time):
         # return list of value(s) associated with key_time
@@ -80,19 +97,27 @@ if __name__ == '__main__':
                         help="Number of Files", required=False)
 
     args = parser.parse_args()
-
+    folder_path = args.folder_name
     # pull all the folders in the file
     # list the folders
-    folder_path = './smallData/'
-    files_lst = [f for f in listdir(folder_path)
-                 if isfile(join(folder_path, f))]
-    print(files_lst)
+    try:
+        files_lst = listdir(folder_path)  # take folder name arg
+    except (FileNotFoundError, NameError):
+        print("File or Folder Not Found")
+        sys.exit(1)
+
     # import all the files into a list of ImportData objects (in a loop!)
     data_lst = []
 
     for file in files_lst:
-        print(ImportData(folder_path+file))
-        data_lst = data_lst.append(ImportData(folder_path+file))
+        # print(ImportData(folder_path+file))
+        # OLD  data_lst = data_lst.append(ImportData(folder_path+file))
+        data_lst.append(ImportData(folder_path + '/' + file))
+
+    if (len(data_lst) == 0):
+        print('Data not found')
+        sys.exit(1)
+    print(data_lst)
 
     # create two new lists of zip objects
     # do this in a loop, where you loop through the data_lst
