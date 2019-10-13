@@ -137,7 +137,7 @@ def printArray(data_list, annotation_list, base_name, key_file):
     annot_b = []
     out = base_name+'.csv'
     if isfile(out):
-        raise NameError("File with that name already exists!")
+        raise NameError("File with that name already exists.")
     if key_file not in annotation_list:
         raise ValueError("Key_file not found!")
     else:
