@@ -31,14 +31,6 @@ class ImportData:
                 self._value.append(row['value'])
             fhandle.close()
 
-        folder_path = args.folder_name
-        files_lst = [f for f in listdir(folder_path)
-                     if isfile(join(folder_path, f))]
-
-        data_lst = []
-        for files in files_lst:
-            data_lst.append(ImportData(folder_path+files))
-
     def linear_search_value(self, key_time):
         # return list of value(s) associated with key_time
         # if none, return -1 and error message
@@ -95,9 +87,12 @@ if __name__ == '__main__':
     files_lst = [f for f in listdir(folder_path)
                  if isfile(join(folder_path, f))]
     print(files_lst)
-
     # import all the files into a list of ImportData objects (in a loop!)
     data_lst = []
+
+    for file in files_lst:
+        print(ImportData(folder_path+file))
+        data_lst = data_lst.append(ImportData(folder_path+file))
 
     # create two new lists of zip objects
     # do this in a loop, where you loop through the data_lst
