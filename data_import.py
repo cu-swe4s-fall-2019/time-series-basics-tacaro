@@ -108,7 +108,7 @@ def roundTimeArray(obj, res):
 
     if num_times > 0:
         time_lst.append(obj._time[0])
-        sch = obj.linear_search_value(obj.time[0])  # search
+        sch = obj.linear_search_value(obj._time[0])  # search
         if type == 0:
             vals.append(sum(sch))  # summed
         elif type == 1:
@@ -131,29 +131,31 @@ def roundTimeArray(obj, res):
 
 def printArray(data_list, annotation_list, base_name, key_file):
     # combine and print on the key_file
-    data_a = []
-    data_b = []
+    zip_a = []
+    zip_b = []
     annot_a = []
     annot_b = []
+    out = base_name+'.csv'
+    if isfile(out):
+        raise NameError("File with that name already exists!")
     if key_file not in annotation_list:
-        print("Key_file not found")
-        return -1
+        raise ValueError("Key_file not found!")
     else:
         for i in range(len(annotation_list)):
             if (annotation_list[i] == key_file):
                 annot_a.append(annotation_list[i])
-                data_a.append(data_list[i])
+                zip_a.append(data_list[i])
             else:
                 annot_b.append(annotation_list[i])
-                data_b.append(data_list[i])
+                zip_b.append(data_list[i])
 
     zipper = ['time', key_file] + annot_b
     with open(base_name+'.csv', mode='w') as output:
         wtr = csv.writer(output, delimiter=',')  # define a writer
         wtr.writerow(zipper)
-        for (time, val) in data_a[0]:
+        for (time, val) in zip_a[0]:
             old = []
-            for data in data_b:
+            for data in zip_b:
                 start_length = len(old)
                 for (timex, valsx) in data:
                     if time == timex:
@@ -161,7 +163,7 @@ def printArray(data_list, annotation_list, base_name, key_file):
                 if len(old) == start_length:
                     old.append(0)
             wtr.writerow([time, val] + old)
-    # pass
+    pass
 
 
 if __name__ == '__main__':
@@ -182,6 +184,8 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     folder_path = args.folder_name
+    out = args.output_file
+    sorter = args.sort_key
     # pull all the folders in the file
     # list the folders
     try:
@@ -197,7 +201,7 @@ if __name__ == '__main__':
     for file in files_lst:
         # print(ImportData(folder_path+file))
         # OLD  data_lst = data_lst.append(ImportData(folder_path+file))
-        print(file)
+        #print(file)
         data_lst.append(ImportData(folder_path + '/' + file))
 
     if (len(data_lst) == 0):
@@ -208,8 +212,15 @@ if __name__ == '__main__':
     # create two new lists of zip objects
     # do this in a loop, where you loop through the data_lst
     data_5 = []  # a list with time rounded to 5min
+    for instance in data_lst:
+        data_5.append(roundTimeArray(instance, 5))
     data_15 = []  # a list with time rounded to 15min
+    for instance in data_lst:
+        data_15.append(roundTimeArray(instance, 15))
 
     # print to a csv file
+    printer_5 = printArray(data_5, files_lst, out+'5', sorter)
+    printer_15 = printArray(data_15, files_lst, out+'15', sorter)
+
     # printArray(data_5, files_lst, args.output_file+'_5', args.sort_key)
     # printArray(data_15, files_lst, args.output_file+'_15', args.sort_key)
