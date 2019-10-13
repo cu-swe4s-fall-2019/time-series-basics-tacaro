@@ -101,7 +101,8 @@ if __name__ == '__main__':
     # pull all the folders in the file
     # list the folders
     try:
-        files_lst = listdir(folder_path)  # take folder name arg
+        files_lst = [f for f in listdir(folder_path) if f.endswith('.csv')]
+        # take folder name arg
     except (FileNotFoundError, NameError):
         print("File or Folder Not Found")
         sys.exit(1)
@@ -112,6 +113,7 @@ if __name__ == '__main__':
     for file in files_lst:
         # print(ImportData(folder_path+file))
         # OLD  data_lst = data_lst.append(ImportData(folder_path+file))
+        print(file)
         data_lst.append(ImportData(folder_path + '/' + file))
 
     if (len(data_lst) == 0):
