@@ -79,7 +79,20 @@ class ImportData:
         # return list of value(s) associated with key_time
         # if none, return -1 and error message
         # COME BACK TO THIS!
-        pass
+        output = []
+        low_bound = 0
+        up_bound = len(self._time) - 1
+        middle = -1
+        while (up_bound - low_bound > 1):
+            middle = (up_bound + low_bound) // 2
+            if key_time == self._time[middle]:
+                break
+            elif self._time[middle] < key_time:
+                low_bound = middle + 1
+            else:
+                high_bound = middle - 1
+
+        output.append(self._value[mid])
 
 
 def roundTimeArray(obj, res):
@@ -201,7 +214,7 @@ if __name__ == '__main__':
     for file in files_lst:
         # print(ImportData(folder_path+file))
         # OLD  data_lst = data_lst.append(ImportData(folder_path+file))
-        #print(file)
+        # print(file)
         data_lst.append(ImportData(folder_path + '/' + file))
 
     if (len(data_lst) == 0):
