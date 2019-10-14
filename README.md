@@ -4,6 +4,8 @@ Time Series basics - importing, cleaning, printing to csv
 
 Note date files are synthetic data.
 
+[![Build Status](https://travis-ci.com/cu-swe4s-fall-2019/time-series-basics-tacaro.svg?branch=master)](https://travis-ci.com/cu-swe4s-fall-2019/time-series-basics-tacaro)
+
 ## Installation
 
 This package requires Python3 and the following python packages:
