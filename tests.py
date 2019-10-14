@@ -50,5 +50,6 @@ class Test_Math_Lib(unittest.TestCase):
         self.assertEqual(instance._value[1], 300)
         os.remove('bolus_replace_tester.csv')
 
+
 if __name__ == '__main__':
     unittest.main()
