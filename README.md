@@ -33,7 +33,7 @@ ImportData is the major class of data_import.py It takes a.csv file that contain
 - value: a parallel array containing values
 - file: the filename
 
-Functions:
+**Functions:**
 
 - linear_search_value: returns the values of a given datetime object. Returns -1 if no values match.
 
