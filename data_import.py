@@ -201,7 +201,7 @@ if __name__ == '__main__':
     for file in files_lst:
         # print(ImportData(folder_path+file))
         # OLD  data_lst = data_lst.append(ImportData(folder_path+file))
-        #print(file)
+        # print(file)
         data_lst.append(ImportData(folder_path + '/' + file))
 
     if (len(data_lst) == 0):
