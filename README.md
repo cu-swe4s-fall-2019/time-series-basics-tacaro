@@ -58,6 +58,11 @@ big_df = cgm_small.merge(all_files[0], on='time', how='left')
 
 8. New csvs are saved with `.tocsv()`
 
+## Benchmarking
+Using GNU-Time, the pandas_import.py script took 5.83 seconds and used 74472kb of memory.
+
+Similarly, the data_import.py script took 31.46 seconds and used 444091kb of memory.
+
 ## Usage [Legacy]
 
 data_import.py is the executed script. It is used in the following manner: `python data_import.py --folder_name smallData --output_file out --sort_key hr_small.csv` where --folder_name is the folder containing .csv files, --output_file is the name of the desired output .csv file --sort_key is the file used to sort the data
